@@ -5,9 +5,19 @@ import javax.persistence.Id;
 
 @Entity
 public class Member {
+
+    // PK값 지정해주어야함 @Id 사용
     @Id
     private Long id;
     private String name;
+
+    public Member() {
+
+    }
+    public Member(Long id, String name) {
+        this.id = id;
+        this.name = name;
+    }
 
     public Long getId() {
         return id;

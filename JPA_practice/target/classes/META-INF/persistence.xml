@@ -5,22 +5,19 @@
     <persistence-unit name="hello">
         <properties>
             <!-- 필수 속성 -->
-            <!-- 어떤 DB 드라이버를 쓰는지 -->
             <property name="javax.persistence.jdbc.driver" value="org.h2.Driver"/>
-            <!-- user 아이디, PW -->
             <property name="javax.persistence.jdbc.user" value="sa"/>
             <property name="javax.persistence.jdbc.password" value=""/>
-            <!-- 경로 -->
             <property name="javax.persistence.jdbc.url" value="jdbc:h2:tcp://localhost/~/test"/>
-            <!-- 방언 명시. JPA는 DB에 종속되지 않으므로, 어떤 DB 언어를 쓰는지 명시해 주어야 한다. -->
             <property name="hibernate.dialect" value="org.hibernate.dialect.H2Dialect"/>
 
             <!-- 옵션 -->
             <property name="hibernate.show_sql" value="true"/>
             <property name="hibernate.format_sql" value="true"/>
             <property name="hibernate.use_sql_comments" value="true"/>
-            <!-- ddl 설정  (Data Definition Language)-->
-            <property name="hibernate.hbm2ddl.auto" value="create" />
+            <property name="hibernate.hbm2ddl.auto" value="update" />
+<!--            설정한 value만큼 모아서 commit을 해주는 조건 (버퍼개념) -->
+<!--            <property name="hibernate.jdbc.batch_size" value="10"/>-->
         </properties>
     </persistence-unit>
 </persistence>
