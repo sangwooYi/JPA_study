@@ -45,6 +45,8 @@ public class JpaMain {
             tx.commit();  // 쿼리는 이 순간에 날라감!
             // .flush() 역할, 1차캐쉬는 사실 특정 쿼리를 find해 오는 시점에 스냅샷을 찍어둠
             // 그래서 flush 가 호출 될떄, 현재 시점과, 초기 시점을 비교해 변경사항을 자동 update 함
+            // flush 는 DB와의 동기화 (synchronization)을 위한것! 쿼리 or 커밋할때 자동 호출됨 (모드 설정 가능)
+
         } catch (Exception e) {
             tx.rollback();
         } finally {
