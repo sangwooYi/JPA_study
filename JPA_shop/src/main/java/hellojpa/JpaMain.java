@@ -17,17 +17,28 @@ public class JpaMain {
         tx.begin();
 
         try {
-//            Team team = new Team("teamB");
-//            em.persist(team);
+            Team team = new Team();
+            team.setTeamName("TeamC");
+            em.persist(team);
+
+            Member member = new Member("memberA", team);
+            em.persist(member);
+
+            // 이 예제에서는 flush(), clear()를 통해 DB sync 맞춰 주고, 영속성 제거 해주어야
+            // 제대로 members에 대한 값을 가져온다! (주의!)
+            em.flush();
+            em.clear();
+
+            Member findMember = em.find(Member.class, member.getId());
+            List<Member> members = findMember.getTeam().getMembers();
+
+            for (Member m : members) {
+                System.out.println("m: " + m.getMemberName());
+            }
 //
-//            Member member = new Member("memberA", team);
-//            em.persist(member);
-
-            Member member = em.find(Member.class, 3L);
-
-            System.out.println("member: " + member);
-            Team team = member.getTeam();
-            System.out.println("TEAM: " + team);
+//            System.out.println("member: " + member);
+//            Team team = member.getTeam();
+//            System.out.println("TEAM: " + team);
 
             tx.commit();  // 쿼리는 이 순간에 날라감!
 
