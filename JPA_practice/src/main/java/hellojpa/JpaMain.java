@@ -26,21 +26,32 @@ public class JpaMain {
             // 한 트랜잭션 안에서는 1차 캐쉬를 통해 이미 한번 가져온 값은 쿼리가 나가지 않음!!
 
 
-            Album album = new Album();  // 기본적으로 null 허용이다.
-            album.setArtist("하하");
-            album.setName("김치");
+//            Album album = new Album();  // 기본적으로 null 허용이다.
+//            album.setArtist("하하");
+//            album.setName("김치");
+//
+//            em.persist(album);
+//
+//            em.flush();
+//            em.clear();
+//
+//            Album alb = em.getReference(Album.class, album.getId()); // 이때는 프록시로만 가져옴! (select 쿼리가 나가지 않음)
+//            System.out.println("who is this? : " + alb.getClass()); // 프록시(가짜 엔티티)를 가져온것!
+//
+//            em.detach(alb);  // 이렇게 준영속 상태에서 프록시 초기화 하려고 하면 LazyInitializationException 발생
+//
+//            alb.getArtist();
 
-            em.persist(album);
+            Parent parent = new Parent();
 
-            em.flush();
-            em.clear();
+            Child child1 = new Child();
+            Child child2 = new Child();
+            parent.addChild(child1);
+            parent.addChild(child2);
 
-            Album alb = em.getReference(Album.class, album.getId()); // 이때는 프록시로만 가져옴! (select 쿼리가 나가지 않음)
-            System.out.println("who is this? : " + alb.getClass()); // 프록시(가짜 엔티티)를 가져온것!
-
-            em.detach(alb);  // 이렇게 준영속 상태에서 프록시 초기화 하려고 하면 LazyInitializationException 발생
-
-            alb.getArtist();
+            em.persist(parent);
+//            em.persist(child1);
+//            em.persist(child2);  // 이런거 귀찮을떄 쓰는게 CASCADE (영속성 전이)
 
             tx.commit();  // 쿼리는 이 순간에 날라감!
             // .flush() 역할, 1차캐쉬는 사실 특정 쿼리를 find해 오는 시점에 스냅샷을 찍어둠
