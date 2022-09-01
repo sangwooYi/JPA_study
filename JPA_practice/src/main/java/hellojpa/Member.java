@@ -1,30 +1,43 @@
 package hellojpa;
 
 import javax.persistence.*;
-import java.util.Date;
+import java.util.ArrayList;
+import java.util.List;
 
+
+//@SequenceGenerator(
+//        name = "MEMBER_SEQ_GENERATOR",
+//        sequenceName = "MEMBER_SEQ",
+//        initialValue = 1, allocationSize = 50)
 @Entity
-@SequenceGenerator(
-        name = "MEMBER_SEQ_GENERATOR",
-        sequenceName = "MEMBER_SEQ",
-        initialValue = 1, allocationSize = 50)
 public class Member {
 
     // PK값 지정해주어야함 @Id 사용
+//    @Id
+//    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "MEMBER_SEQ_GENERATOR")
+//    private Long id;
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "MEMBER_SEQ_GENERATOR")
+    @GeneratedValue
+    @Column(name = "MEMBER_ID")
     private Long id;
 
-    @Column(name = "name")
-    private String userName;
+    @Column
+    private String name;
+    @Column
+    private String city;
+    @Column
+    private String street;
+    @Column
+    private String zipCode;
 
-    private Integer age;
+    @OneToMany(mappedBy = "member")
+    private List<Orders> orders = new ArrayList<>();
 
     // enum 쓰려면 기본값인 .ORDINAL이 아닌 .STRING을 쓰자!
     // (ORDINAL은 실제 운영에서 위험하다. ex USER, ADMIN 에서 GUEST, USER, ADMIN 이렇게 변경시
     // 기존 USER로 저장된 data와 새로 들어온 GUEST 데이터 구분이 DB상으로 안 된다.)
-    @Enumerated(EnumType.STRING)
-    private RoleType roleType;
+//    @Enumerated(EnumType.STRING)
+//    private RoleType roleType;
 
 //    @Temporal(TemporalType.TIMESTAMP)   // Date 연,월,일  Time 시,분,초  TIMESTAMP date+time
 //    private Date createdDate;
@@ -33,59 +46,54 @@ public class Member {
 //    private Date lastModifiedDate;
 
 
-    @Lob  // Large Object 가번길이의 큰 데이터를 저장하는데 사용
-    private String description;
+//    @Lob  // Large Object 가번길이의 큰 데이터를 저장하는데 사용
+//    private String description;
 
     public Member() {
 
     }
 
-    public Member(Long id, String userName, Integer age, RoleType roleType, Date createdDate, Date lastModifiedDate, String description) {
-        this.id = id;
-        this.userName = userName;
-        this.age = age;
-        this.roleType = roleType;
-        this.description = description;
+    public Member(String name, String city, String street, String zipCode) {
+        this.name = name;
+        this.city = city;
+        this.street = street;
+        this.zipCode = zipCode;
     }
 
-    public Long getId() {
-        return id;
+    public String getName() {
+        return name;
     }
 
-    public void setId(Long id) {
-        this.id = id;
+    public void setName(String name) {
+        this.name = name;
     }
 
-    public String getUserName() {
-        return userName;
+    public String getCity() {
+        return city;
     }
 
-    public void setUserName(String userName) {
-        this.userName = userName;
+    public void setCity(String city) {
+        this.city = city;
     }
 
-    public Integer getAge() {
-        return age;
+    public String getStreet() {
+        return street;
     }
 
-    public void setAge(Integer age) {
-        this.age = age;
+    public void setStreet(String street) {
+        this.street = street;
     }
 
-    public RoleType getRoleType() {
-        return roleType;
+    public String getZipCode() {
+        return zipCode;
     }
 
-    public void setRoleType(RoleType roleType) {
-        this.roleType = roleType;
+    public void setZipCode(String zipCode) {
+        this.zipCode = zipCode;
     }
 
-
-    public String getDescription() {
-        return description;
+    public List<Orders> getOrders() {
+        return orders;
     }
 
-    public void setDescription(String description) {
-        this.description = description;
-    }
 }

@@ -18,12 +18,12 @@ public class JpaMain {
 
         try {
             // 비영속 상태
-            Member member = new Member();
-            member.setUserName("sang11woo");
-            member.setAge(19);
-            member.setRoleType(RoleType.USER);
+//            Member member = new Member();
+//            member.setUserName("sang11woo");
+//            member.setAge(19);
+//            member.setRoleType(RoleType.USER);
             // 이때부터 이 객체는 영속 상태가 됨
-            em.persist(member); // 이때 쿼리가 날라가는것은 아님!
+            //em.persist(member); // 이때 쿼리가 날라가는것은 아님!
             // 이렇게 createQuery로 쿼리 작성 가능 (JPQL)
             // 클래스.class 는 인스턴스.getClass() 와 동일한 역할임 (클래스에 직접 접근하는법, 인스턴스가 없을때 보통 사용)
 //            List<Member> members = em.createQuery("select m from Member as m", Member.class)
