@@ -4,7 +4,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.EntityTransaction;
 import javax.persistence.Persistence;
-import java.util.List;
+
 
 public class JpaMain {
     public static void main(String[] args) {
@@ -24,19 +24,41 @@ public class JpaMain {
 //            member.setRoleType(RoleType.USER);
             // 이때부터 이 객체는 영속 상태가 됨
             //em.persist(member); // 이때 쿼리가 날라가는것은 아님!
+
+            // 이때부터 이 객체 영속 상태가 됨
+            //em.persist(member);
             // 이렇게 createQuery로 쿼리 작성 가능 (JPQL)
-            // 클래스.class 는 인스턴스.getClass() 와 동일한 역할임 (클래스에 직접 접근하는법, 인스턴스가 없을때 보통 사용)
-//            List<Member> members = em.createQuery("select m from Member as m", Member.class)
-//                    .getResultList();
-//            for (Member member : members) {
-//                System.out.println("member: " + member.getName());
-//            }
+
             // C는 추가할 객체 생성 후 .persist()로 영속성 등록 , find(), .remove() 으로 R, D 가능 업데이트는 알아서 해줌
             // 한 트랜잭션 안에서는 1차 캐쉬를 통해 이미 한번 가져온 값은 쿼리가 나가지 않음!!
-//            Member member1 = em.find(Member.class, 1L);
-//            Member member2 = em.find(Member.class, 1L);
-//            // true 동일성 보장.
-//            System.out.println(member2 == member1);
+
+
+//            Album album = new Album();  // 기본적으로 null 허용이다.
+//            album.setArtist("하하");
+//            album.setName("김치");
+//
+//            em.persist(album);
+//
+//            em.flush();
+//            em.clear();
+//
+//            Album alb = em.getReference(Album.class, album.getId()); // 이때는 프록시로만 가져옴! (select 쿼리가 나가지 않음)
+//            System.out.println("who is this? : " + alb.getClass()); // 프록시(가짜 엔티티)를 가져온것!
+//
+//            em.detach(alb);  // 이렇게 준영속 상태에서 프록시 초기화 하려고 하면 LazyInitializationException 발생
+//
+//            alb.getArtist();
+
+            Parent parent = new Parent();
+
+            Child child1 = new Child();
+            Child child2 = new Child();
+            parent.addChild(child1);
+            parent.addChild(child2);
+
+            em.persist(parent);
+//            em.persist(child1);
+//            em.persist(child2);  // 이런거 귀찮을떄 쓰는게 CASCADE (영속성 전이)
 
             tx.commit();  // 쿼리는 이 순간에 날라감!
             // .flush() 역할, 1차캐쉬는 사실 특정 쿼리를 find해 오는 시점에 스냅샷을 찍어둠
@@ -45,6 +67,8 @@ public class JpaMain {
 
         } catch (Exception e) {
             tx.rollback();
+            // Exception stackTrace 출력하는법!
+            e.printStackTrace();
         } finally {
             em.close();
         }

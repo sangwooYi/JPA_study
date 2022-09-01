@@ -29,6 +29,13 @@ public class Member {
     @OneToMany(mappedBy = "member")
     List<Order> orders = new ArrayList<>();
 
+    @OneToOne
+    // 외래키 관리하는 주인 테이블에 JoinColumn를 걸어주어야만 한다.
+    // 이거 안걸어주면 기본적으로 조인테이블 사용함
+    @JoinColumn(name = "LOCKER_ID")
+    private Locker locker;
+
+
     public Long getId() {
         return id;
     }

@@ -58,6 +58,7 @@ public class OrderItem {
 
     public void setItem(Item item) {
         this.item = item;
+        // 순환참조 방지
         if (!item.getOrderItems().contains(this)) {
             item.getOrderItems().add(this);
         }

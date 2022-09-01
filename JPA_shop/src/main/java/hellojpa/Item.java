@@ -44,9 +44,10 @@ public class Item {
         return orderItems;
     }
 
-    // 순환참조 방지
+
     public void addOrderItem(OrderItem orderItem) {
         this.orderItems.add(orderItem);
+        // 순환참조 방지
         if (orderItem.getItem() != this) {
             orderItem.setItem(this);
         }
