@@ -2,7 +2,9 @@ package hellojpa;
 
 import javax.persistence.*;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 
 //@SequenceGenerator(
@@ -21,17 +23,29 @@ public class Member {
     @Column(name = "MEMBER_ID")
     private Long id;
 
-    @Column
     private String name;
-    @Column
-    private String city;
-    @Column
-    private String street;
-    @Column
-    private String zipCode;
+    // 주의, 임베디드 타입에 있는 필드와 같은 필드가 이미 있으면 매핑 exception 발생한다!
+    @Embedded
+    private Address homeAddress;
 
-    @OneToMany(mappedBy = "member")
-    private List<Orders> orders = new ArrayList<>();
+    // 값타입 매핑하려면 아래처럼 @ElementCollection, @CollectionTable 어노테이션을 추가해야함.
+    @ElementCollection
+    @CollectionTable(name = "FAVORITE_FOOD", joinColumns =
+        @JoinColumn(name = "MEMBER_ID")
+    )
+    //@Column(name = "FOOD_NAME") // element가 값이 하나이고, 자바에서 제공한 클래스인 경우 이렇게도 가능
+    private Set<String> favoriteFoods = new HashSet<>();
+
+    @ElementCollection
+    @CollectionTable(name = "ADDRESS", joinColumns =
+        @JoinColumn(name = "MEMBER_ID")
+    )
+    private List<Address> adressHistory = new ArrayList<>();
+
+    @ManyToOne(fetch = FetchType.LAZY)  // 지연로딩 설정 왠만하면 해둘것
+    @JoinColumn(name = "TEAM_ID")
+    private Team team;
+
 
     // enum 쓰려면 기본값인 .ORDINAL이 아닌 .STRING을 쓰자!
     // (ORDINAL은 실제 운영에서 위험하다. ex USER, ADMIN 에서 GUEST, USER, ADMIN 이렇게 변경시
@@ -53,13 +67,16 @@ public class Member {
 
     }
 
-    public Member(String name, String city, String street, String zipCode) {
-        this.name = name;
-        this.city = city;
-        this.street = street;
-        this.zipCode = zipCode;
-    }
+//    public Member(String name, String city, String street, String zipCode) {
+//        this.name = name;
+//        this.city = city;
+//        this.street = street;
+//        this.zipCode = zipCode;
+//    }
 
+    public Long getId() {
+        return id;
+    }
     public String getName() {
         return name;
     }
@@ -68,32 +85,31 @@ public class Member {
         this.name = name;
     }
 
-    public String getCity() {
-        return city;
+    public Address getHomeAddress() {
+        return homeAddress;
     }
 
-    public void setCity(String city) {
-        this.city = city;
+    public void setHomeAddress(Address homeAddress) {
+        this.homeAddress = homeAddress;
     }
 
-    public String getStreet() {
-        return street;
+    public Set<String> getFavoriteFoods() {
+        return favoriteFoods;
     }
 
-    public void setStreet(String street) {
-        this.street = street;
+    public List<Address> getAdressHistory() {
+        return adressHistory;
     }
 
-    public String getZipCode() {
-        return zipCode;
+    public Team getTeam() {
+        return team;
     }
 
-    public void setZipCode(String zipCode) {
-        this.zipCode = zipCode;
+    public void setTeam(Team team) {
+        this.team = team;
+        // 순환참조 방지
+        if (!team.getMembers().contains(this)) {
+            team.getMembers().add(this);
+        }
     }
-
-    public List<Orders> getOrders() {
-        return orders;
-    }
-
 }
