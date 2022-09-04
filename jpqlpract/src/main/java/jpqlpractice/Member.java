@@ -6,6 +6,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
+@NamedQuery(
+        name = "Member.findByUserName",
+        query = "select m from Member m where m.userName = :userName"
+)
 public class Member extends BaseEntity {
 
     @Column(length = 30)

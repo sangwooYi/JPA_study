@@ -1,5 +1,7 @@
 package jpqlpractice;
 
+import org.hibernate.dialect.Oracle12cDialect;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.OneToMany;
@@ -30,4 +32,5 @@ public class Team extends BaseEntity {
     public List<Member> getMembers() {
         return members;
     }
+
 }
